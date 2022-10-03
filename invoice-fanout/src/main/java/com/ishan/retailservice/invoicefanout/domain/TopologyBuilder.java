@@ -3,6 +3,7 @@ package com.ishan.retailservice.invoicefanout.domain;
 import com.ishan.retailservice.invoicefanout.port.adapters.config.AppSerdes;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import org.apache.kafka.common.utils.Bytes;
 import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.kstream.Consumed;
@@ -10,11 +11,12 @@ import org.apache.kafka.streams.kstream.Grouped;
 import org.apache.kafka.streams.kstream.KStream;
 import org.apache.kafka.streams.kstream.Materialized;
 import org.apache.kafka.streams.kstream.Produced;
+import org.apache.kafka.streams.state.KeyValueStore;
 
 public class TopologyBuilder {
 
   public static void build(StreamsBuilder builder, String invoiceTopic,
-      String shipmentTopic, String loyaltyTopic, String productPurchaseTopic) {
+      String shipmentTopic, String loyaltyTopic, String loyaltyStore, String productPurchaseTopic) {
     KStream<String, Invoice> invoiceStream = builder
         .stream(invoiceTopic,
             Consumed.with(AppSerdes.String(), AppSerdes.invoice()));
@@ -33,7 +35,6 @@ public class TopologyBuilder {
     Create a loyalty purchase event from the invoice and send it to the
     loyalty topic. This should also contain the total loyalty points
      */
-
     invoiceStream
         .filter((key, invoice) -> "PRIME".equals(invoice.getCustomerType()))
         .map((key, invoice) -> new KeyValue<>(invoice.getCustomerId(), toLoyalty(invoice)))
@@ -41,7 +42,9 @@ public class TopologyBuilder {
         .reduce((aggValue, newValue) -> {
           newValue.setTotalLoyaltyPoints(newValue.getLoyaltyPoints() + aggValue.getTotalLoyaltyPoints());
           return newValue;
-        }, Materialized.as("loyalty-store-test"))
+        }, Materialized.<String, LoyaltyPurchase, KeyValueStore<Bytes, byte[]>>as(loyaltyStore)
+            .withKeySerde(AppSerdes.String())
+            .withValueSerde(AppSerdes.loyaltyPurchase()))
         .toStream()
         .to(loyaltyTopic, Produced.with(AppSerdes.String(), AppSerdes.loyaltyPurchase()));
 

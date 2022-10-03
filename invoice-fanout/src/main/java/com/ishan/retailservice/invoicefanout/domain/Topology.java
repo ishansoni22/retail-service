@@ -20,6 +20,9 @@ public class Topology {
   @Value("${loyalty.topic}")
   private String loyaltyTopic;
 
+  @Value("${loyalty.store}")
+  private String loyaltyStore;
+
   @Value("${product.purchase.topic}")
   private String productPurchaseTopic;
 
@@ -33,6 +36,7 @@ public class Topology {
         invoiceTopic,
         shipmentTopic,
         loyaltyTopic,
+        loyaltyStore,
         productPurchaseTopic
     );
   }

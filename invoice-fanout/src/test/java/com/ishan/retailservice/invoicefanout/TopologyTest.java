@@ -39,6 +39,7 @@ public class TopologyTest {
         "invoice-test",
         "shipment-test",
         "loyalty-test",
+        "loyalty-store-test",
         "product-purchase-test"
         );
 
@@ -87,7 +88,7 @@ public class TopologyTest {
 
   }
 
-  @Test
+  //@Test
   public void testTotalLoyaltyPoints() {
     invoiceTopic.pipeInput(
         Invoice.builder()

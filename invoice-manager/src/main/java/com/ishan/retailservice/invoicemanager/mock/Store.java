@@ -41,7 +41,7 @@ public class Store implements Runnable {
       invoice.setTime(LocalDateTime.now().toString());
       invoice.setStoreId(this.storeId);
       invoice.setStoreCountry(this.storeCountry);
-      invoice.setCustomerId("customer-" + faker.random().nextInt(1, 50));
+      invoice.setCustomerId("customer-" + faker.random().nextInt(1, 10000));
       String name = this.faker.name().fullName();
       invoice.setCustomerName(name);
       if (faker.random().nextBoolean()) {

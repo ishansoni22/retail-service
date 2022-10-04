@@ -17,7 +17,7 @@ public class AppSerdes extends Serdes {
     }
   }
 
-  public static Serde<Invoice> invoice() {
+  public static Serde<Invoice> Invoice() {
     InvoiceSerde invoiceSerde = new InvoiceSerde();
     Map<String, Object> configMap = new HashMap<>();
     configMap.put(JsonDeserializer.VALUE_CLASS_NAME_CONFIG, Invoice.class);
@@ -32,7 +32,7 @@ public class AppSerdes extends Serdes {
     }
   }
 
-  public static Serde<LoyaltyPurchase> loyaltyPurchase() {
+  public static Serde<LoyaltyPurchase> Loyalty() {
     LoyaltyPurchaseSerde loyaltyPurchaseSerde = new LoyaltyPurchaseSerde();
     Map<String, Object> configMap = new HashMap<>();
     configMap.put(JsonDeserializer.VALUE_CLASS_NAME_CONFIG, LoyaltyPurchase.class);
@@ -47,7 +47,7 @@ public class AppSerdes extends Serdes {
     }
   }
 
-  public static Serde<ProductPurchase> productPurchase() {
+  public static Serde<ProductPurchase> Product() {
     ProductPurchaseSerde productPurchaseSerde = new ProductPurchaseSerde();
     Map<String, Object> configMap = new HashMap<>();
     configMap.put(JsonDeserializer.VALUE_CLASS_NAME_CONFIG, LoyaltyPurchase.class);

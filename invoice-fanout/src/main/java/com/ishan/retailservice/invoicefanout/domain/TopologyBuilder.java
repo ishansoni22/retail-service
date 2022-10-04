@@ -3,8 +3,8 @@ package com.ishan.retailservice.invoicefanout.domain;
 import com.ishan.retailservice.invoicefanout.port.adapters.config.AppSerdes;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.common.utils.Bytes;
-import org.apache.kafka.streams.KeyValue;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.kstream.Consumed;
 import org.apache.kafka.streams.kstream.Grouped;
@@ -15,11 +15,18 @@ import org.apache.kafka.streams.state.KeyValueStore;
 
 public class TopologyBuilder {
 
-  public static void build(StreamsBuilder builder, String invoiceTopic,
-      String shipmentTopic, String loyaltyTopic, String loyaltyStore, String productPurchaseTopic) {
+  private TopologyBuilder() {}
+
+  public static void build(
+      StreamsBuilder builder,
+      String invoiceTopic,
+      String shipmentTopic,
+      String loyaltyTopic, String loyaltyStore,
+      String productPurchaseTopic) {
+
     KStream<String, Invoice> invoiceStream = builder
         .stream(invoiceTopic,
-            Consumed.with(AppSerdes.String(), AppSerdes.invoice()));
+            Consumed.with(Serdes.String(), AppSerdes.Invoice()));
 
     /*
     Filter online orders
@@ -28,7 +35,7 @@ public class TopologyBuilder {
      */
     invoiceStream
         .filter((key, invoice) -> invoice.getStoreId() == 0)
-        .to(shipmentTopic, Produced.with(AppSerdes.String(), AppSerdes.invoice()));
+        .to(shipmentTopic, Produced.with(Serdes.String(), AppSerdes.Invoice()));
 
     /*
     Filter orders by prime customers
@@ -37,16 +44,22 @@ public class TopologyBuilder {
      */
     invoiceStream
         .filter((key, invoice) -> "PRIME".equals(invoice.getCustomerType()))
-        .map((key, invoice) -> new KeyValue<>(invoice.getCustomerId(), toLoyalty(invoice)))
-        .groupByKey(Grouped.with(AppSerdes.String(), AppSerdes.loyaltyPurchase()))
-        .reduce((aggValue, newValue) -> {
-          newValue.setTotalLoyaltyPoints(newValue.getLoyaltyPoints() + aggValue.getTotalLoyaltyPoints());
-          return newValue;
-        }, Materialized.<String, LoyaltyPurchase, KeyValueStore<Bytes, byte[]>>as(loyaltyStore)
-            .withKeySerde(AppSerdes.String())
-            .withValueSerde(AppSerdes.loyaltyPurchase()))
-        .toStream()
-        .to(loyaltyTopic, Produced.with(AppSerdes.String(), AppSerdes.loyaltyPurchase()));
+        .mapValues(TopologyBuilder::toLoyalty)
+        .groupBy((key, loyalty) -> loyalty.getCustomerId(), Grouped.with(Serdes.String(), AppSerdes.Loyalty()))
+        .aggregate(
+            LoyaltyPurchase::new,
+            (customerId, currentLoyalty, aggregatedLoyalty) ->
+                new LoyaltyPurchase.LoyaltyPurchaseBuilder()
+                .customerId(customerId)
+                .customerName(currentLoyalty.getCustomerName())
+                .invoiceId(currentLoyalty.getInvoiceId())
+                .purchaseValue(currentLoyalty.getPurchaseValue())
+                .loyaltyPoints(currentLoyalty.getLoyaltyPoints())
+                .totalLoyaltyPoints(aggregatedLoyalty.getTotalLoyaltyPoints() + currentLoyalty.getLoyaltyPoints())
+                .build(),
+            Materialized.<String, LoyaltyPurchase, KeyValueStore<Bytes, byte[]>>as(loyaltyStore)
+                .withKeySerde(Serdes.String()).withValueSerde(AppSerdes.Loyalty())
+        ).toStream().to(loyaltyTopic, Produced.with(Serdes.String(), AppSerdes.Loyalty()));
 
     /*
      Push all product purchases to a purchase topic. One invoice can have multiple purchases
@@ -60,10 +73,10 @@ public class TopologyBuilder {
               purchase.setQuantity(orderItem.getQuantity());
               return purchase;
             }
-        ).to(productPurchaseTopic, Produced.with(AppSerdes.String(), AppSerdes.productPurchase()));
+        ).to(productPurchaseTopic, Produced.with(Serdes.String(), AppSerdes.Product()));
   }
 
-  public static LoyaltyPurchase toLoyalty(Invoice invoice) {
+  private static LoyaltyPurchase toLoyalty(Invoice invoice) {
     String customerId = invoice.getCustomerId();
     LoyaltyPurchase loyaltyPurchase = new LoyaltyPurchase();
     loyaltyPurchase.setInvoiceId(invoice.getInvoiceId());

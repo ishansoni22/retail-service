@@ -49,19 +49,19 @@ public class TopologyTest {
 
     invoiceTopic = topologyTestDriver
         .createInputTopic("invoice-test", AppSerdes.String().serializer(),
-            AppSerdes.invoice().serializer());
+            AppSerdes.Invoice().serializer());
 
     shipmentTopic = topologyTestDriver
         .createOutputTopic("shipment-test", AppSerdes.String().deserializer(),
-            AppSerdes.invoice().deserializer());
+            AppSerdes.Invoice().deserializer());
 
     loyaltyTopic = topologyTestDriver
         .createOutputTopic("loyalty-test", AppSerdes.String().deserializer(),
-            AppSerdes.loyaltyPurchase().deserializer());
+            AppSerdes.Loyalty().deserializer());
 
     productPurchaseTopic = topologyTestDriver
         .createOutputTopic("product-purchase-test", AppSerdes.String().deserializer(),
-            AppSerdes.productPurchase().deserializer());
+            AppSerdes.Product().deserializer());
 
   }
 
@@ -88,7 +88,7 @@ public class TopologyTest {
 
   }
 
-  //@Test
+  @Test
   public void testTotalLoyaltyPoints() {
     invoiceTopic.pipeInput(
         Invoice.builder()

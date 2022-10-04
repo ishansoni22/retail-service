@@ -26,6 +26,12 @@ public class Topology {
   @Value("${product.purchase.topic}")
   private String productPurchaseTopic;
 
+  @Value("${best.seller.topic}")
+  private String bestSellersTopic;
+
+  @Value("${best.seller.store}")
+  private String bestSellersStore;
+
   @Autowired
   private StreamsBuilder streamsBuilder;
 
@@ -37,7 +43,9 @@ public class Topology {
         shipmentTopic,
         loyaltyTopic,
         loyaltyStore,
-        productPurchaseTopic
+        productPurchaseTopic,
+        bestSellersTopic,
+        bestSellersStore
     );
   }
 

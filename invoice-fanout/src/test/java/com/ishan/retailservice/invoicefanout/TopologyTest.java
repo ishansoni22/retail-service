@@ -2,13 +2,11 @@ package com.ishan.retailservice.invoicefanout;
 
 import com.ishan.retailservice.invoicefanout.domain.Invoice;
 import com.ishan.retailservice.invoicefanout.domain.LoyaltyPurchase;
-import com.ishan.retailservice.invoicefanout.domain.OrderLineItem;
 import com.ishan.retailservice.invoicefanout.domain.ProductPurchase;
 import com.ishan.retailservice.invoicefanout.domain.TopologyBuilder;
 import com.ishan.retailservice.invoicefanout.port.adapters.config.AppSerdes;
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.UUID;
+import org.apache.kafka.common.serialization.Serdes;
 import org.apache.kafka.streams.StreamsBuilder;
 import org.apache.kafka.streams.TestInputTopic;
 import org.apache.kafka.streams.TestOutputTopic;
@@ -31,120 +29,103 @@ public class TopologyTest {
 
   private static TestOutputTopic<String, ProductPurchase> productPurchaseTopic;
 
+  private static TestOutputTopic<String, Integer> totalProductPurchaseTopic;
+
+  private static final String INVOICE_TOPIC = "invoices-test";
+  private static final String SHIPMENT_TOPIC = "shipments-test";
+  private static final String LOYALTY_TOPIC = "loyalty-test";
+  private static final String LOYALTY_STORE = "loyalty-points-test";
+  private static final String PRODUCT_PURCHASE_TOPIC = "product-purchases-test";
+  private static final String BEST_SELLERS_TOPIC = "best-sellers-test";
+  private static final String BEST_SELLERS_STORE = "best-sellers-store-test";
+
   @BeforeEach
   public void beforeAll() {
     StreamsBuilder streamsBuilder = new StreamsBuilder();
     TopologyBuilder.build(
         streamsBuilder,
-        "invoice-test",
-        "shipment-test",
-        "loyalty-test",
-        "loyalty-store-test",
-        "product-purchase-test"
-        );
+        INVOICE_TOPIC,
+        SHIPMENT_TOPIC,
+        LOYALTY_TOPIC,
+        LOYALTY_STORE,
+        PRODUCT_PURCHASE_TOPIC,
+        BEST_SELLERS_TOPIC,
+        BEST_SELLERS_STORE
+    );
 
     Topology topology = streamsBuilder.build();
 
     topologyTestDriver = new TopologyTestDriver(topology);
 
     invoiceTopic = topologyTestDriver
-        .createInputTopic("invoice-test", AppSerdes.String().serializer(),
+        .createInputTopic(INVOICE_TOPIC, AppSerdes.String().serializer(),
             AppSerdes.Invoice().serializer());
 
     shipmentTopic = topologyTestDriver
-        .createOutputTopic("shipment-test", AppSerdes.String().deserializer(),
+        .createOutputTopic(SHIPMENT_TOPIC, AppSerdes.String().deserializer(),
             AppSerdes.Invoice().deserializer());
 
     loyaltyTopic = topologyTestDriver
-        .createOutputTopic("loyalty-test", AppSerdes.String().deserializer(),
+        .createOutputTopic(LOYALTY_TOPIC, AppSerdes.String().deserializer(),
             AppSerdes.Loyalty().deserializer());
 
     productPurchaseTopic = topologyTestDriver
-        .createOutputTopic("product-purchase-test", AppSerdes.String().deserializer(),
+        .createOutputTopic(PRODUCT_PURCHASE_TOPIC, AppSerdes.String().deserializer(),
             AppSerdes.Product().deserializer());
 
+    totalProductPurchaseTopic = topologyTestDriver
+        .createOutputTopic(BEST_SELLERS_TOPIC, AppSerdes.String().deserializer(),
+            Serdes.Integer().deserializer());
   }
 
   @Test
   public void testShipmentProcessor() {
+    invoiceTopic.pipeInput(InvoiceFixtures.order1());
+    invoiceTopic.pipeInput(InvoiceFixtures.order2());
+    invoiceTopic.pipeInput(InvoiceFixtures.order3());
+    invoiceTopic.pipeInput(InvoiceFixtures.order4());
+    Assertions.assertEquals(1, shipmentTopic.getQueueSize());
+  }
 
-    invoiceTopic.pipeInput(
-        Invoice.builder()
-            .invoiceId(UUID.randomUUID().toString())
-            .storeId(1)
-            .storeCountry("US")
-            .customerId("CUS-1")
-            .customerType("PRIME")
-            .total(BigDecimal.valueOf(100))
-            .orderLineItems(
-                Arrays.asList(
-                    OrderLineItem.builder().product("PRODUCT-1").price(BigDecimal.valueOf(100)).quantity(1).build()
-                )
-            )
-            .build()
-    );
+  @Test
+  public void testTotalLoyaltyPointsProcessor() {
+    invoiceTopic.pipeInput(InvoiceFixtures.order1());
+    invoiceTopic.pipeInput(InvoiceFixtures.order2());
+    invoiceTopic.pipeInput(InvoiceFixtures.order3());
+    invoiceTopic.pipeInput(InvoiceFixtures.order4());
 
-    Assertions.assertEquals(0, shipmentTopic.getQueueSize());
+    KeyValueStore<String, LoyaltyPurchase> loyaltyStore = topologyTestDriver
+        .getKeyValueStore(LOYALTY_STORE);
+
+    LoyaltyPurchase loyalty1 = loyaltyStore.get("CUS-1");
+    Assertions.assertEquals(725, loyalty1.getTotalLoyaltyPoints());
+    Assertions.assertEquals(BigDecimal.valueOf(425), loyalty1.getPurchaseValue());
+
+    LoyaltyPurchase loyalty2 = loyaltyStore.get("CUS-2");
+    Assertions.assertEquals(250, loyalty2.getTotalLoyaltyPoints());
 
   }
 
   @Test
-  public void testTotalLoyaltyPoints() {
-    invoiceTopic.pipeInput(
-        Invoice.builder()
-            .invoiceId(UUID.randomUUID().toString())
-            .storeId(1)
-            .storeCountry("US")
-            .customerId("CUS-1")
-            .customerType("PRIME")
-            .total(BigDecimal.valueOf(100))
-            .orderLineItems(
-                Arrays.asList(
-                    OrderLineItem.builder().product("PRODUCT-1").price(BigDecimal.valueOf(100)).quantity(1).build()
-                )
-            )
-            .build()
-    );
+  public void testBestSellingProductsProcessor() {
+    invoiceTopic.pipeInput(InvoiceFixtures.order1());
+    invoiceTopic.pipeInput(InvoiceFixtures.order2());
+    invoiceTopic.pipeInput(InvoiceFixtures.order3());
+    invoiceTopic.pipeInput(InvoiceFixtures.order4());
 
-    invoiceTopic.pipeInput(
-        Invoice.builder()
-            .invoiceId(UUID.randomUUID().toString())
-            .storeId(0)
-            .storeCountry("US")
-            .customerId("CUS-1")
-            .customerType("PRIME")
-            .total(BigDecimal.valueOf(200))
-            .orderLineItems(
-                Arrays.asList(
-                    OrderLineItem.builder().product("PRODUCT-1").price(BigDecimal.valueOf(100)).quantity(1).build(),
-                    OrderLineItem.builder().product("PRODUCT-2").price(BigDecimal.valueOf(50)).quantity(2).build()
-                )
-            )
-            .build()
-    );
+    KeyValueStore<String, Integer> bestSellingProductStore = topologyTestDriver
+        .getKeyValueStore(BEST_SELLERS_STORE);
 
-    invoiceTopic.pipeInput(
-        Invoice.builder()
-            .invoiceId(UUID.randomUUID().toString())
-            .storeId(0)
-            .storeCountry("US")
-            .customerId("CUS-1")
-            .customerType("PRIME")
-            .total(BigDecimal.valueOf(200))
-            .orderLineItems(
-                Arrays.asList(
-                    OrderLineItem.builder().product("PRODUCT-2").price(BigDecimal.valueOf(50)).quantity(4).build()
-                )
-            )
-            .build()
-    );
+    Integer product1Qty = bestSellingProductStore.get("PRODUCT-1");
+    Integer product2Qty = bestSellingProductStore.get("PRODUCT-2");
+    Integer product3Qty = bestSellingProductStore.get("PRODUCT-3");
+    Integer product4Qty = bestSellingProductStore.get("PRODUCT-4");
 
-    KeyValueStore<String, LoyaltyPurchase> loyaltyStore = topologyTestDriver
-        .getKeyValueStore("loyalty-store-test");
 
-    LoyaltyPurchase loyalty = loyaltyStore.get("CUS-1");
-    Assertions.assertEquals(500, loyalty.getTotalLoyaltyPoints());
-
+    Assertions.assertEquals(3, product1Qty);
+    Assertions.assertEquals(4, product2Qty);
+    Assertions.assertEquals(3, product3Qty);
+    Assertions.assertEquals(10, product4Qty);
   }
 
 }

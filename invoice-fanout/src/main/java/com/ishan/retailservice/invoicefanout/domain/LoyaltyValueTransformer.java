@@ -8,6 +8,7 @@ import org.apache.kafka.streams.processor.ProcessorContext;
 import org.apache.kafka.streams.state.KeyValueStore;
 
 @Slf4j
+@Deprecated
 public class LoyaltyValueTransformer implements ValueTransformer<Invoice, LoyaltyPurchase> {
 
   private String loyaltyStateStore;

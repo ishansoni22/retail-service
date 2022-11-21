@@ -3,6 +3,7 @@ package com.ishan.retailservice.invoicefanout.domain;
 import com.ishan.retailservice.invoicefanout.port.adapters.config.AppSerdes;
 import java.math.MathContext;
 import java.math.RoundingMode;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 import org.apache.kafka.common.serialization.Serdes;
@@ -23,10 +24,12 @@ public class TopologyBuilder {
 
   public static void build(
       StreamsBuilder builder,
+      BestSellerService bestSellerService,
       String invoiceTopic,
       String shipmentTopic,
       String loyaltyTopic, String loyaltyStore,
-      String productPurchaseTopic, String bestSellersTopic, String bestSellersStore) {
+      String bestSellersTopic, String bestSellersStore,
+      String salesByStoreTopic, String salesByStoreStore) {
 
     KStream<String, Invoice> invoiceStream = builder
         .stream(invoiceTopic,
@@ -37,6 +40,7 @@ public class TopologyBuilder {
     (These orders need to be shipped to the customer's selected delivery address)
      Push them to the shipment topic
      */
+
     invoiceStream
         .filter((key, invoice) -> invoice.getStoreId() == 0)
         .to(shipmentTopic, Produced.with(Serdes.String(), AppSerdes.Invoice()));
@@ -46,6 +50,7 @@ public class TopologyBuilder {
     Create a loyalty purchase event from the invoice and send it to the
     loyalty topic. This should also contain the total loyalty points
      */
+
     invoiceStream
         .filter((key, invoice) -> "PRIME".equals(invoice.getCustomerType()))
         .mapValues(TopologyBuilder::toLoyalty)
@@ -68,17 +73,15 @@ public class TopologyBuilder {
         ).toStream().to(loyaltyTopic, Produced.with(Serdes.String(), AppSerdes.Loyalty()));
 
     /*
-     Push product purchases to the product purchase topic
+    Best sellers (Pushed to a Redis Sorted Set!)
      */
+
     KStream<String, ProductPurchase> productPurchaseStream
         = invoiceStream.flatMapValues(TopologyBuilder::toProductPurchase);
 
-    productPurchaseStream
-        .to(productPurchaseTopic, Produced.with(Serdes.String(), AppSerdes.Product()));
-
     /*
-    Best selling products
-     */
+    Instead of aggregating, push product purchases to a redis sorted set
+    */
 
     productPurchaseStream
         .map((invoiceId, productPurchase)
@@ -91,6 +94,25 @@ public class TopologyBuilder {
                 .withKeySerde(Serdes.String()).withValueSerde(Serdes.Integer())
         ).toStream().to(bestSellersTopic, Produced.with(Serdes.String(), Serdes.Integer()));
 
+    productPurchaseStream
+        .map((invoiceId, productPurchase)
+            -> new KeyValue<>(productPurchase.getProduct(), productPurchase.getQuantity()))
+        .foreach(bestSellerService::registerProductPurchase);
+
+    /*
+    Total sales by store by month
+     */
+
+    invoiceStream
+        .map((key, invoice)
+            -> new KeyValue<>(salesStoreKeyByMonth(invoice.getStoreId()), invoice.getTotal().doubleValue()))
+        .groupByKey(Grouped.with(Serdes.String(), Serdes.Double()))
+        .aggregate(
+            () -> 0D,
+            (storeId, currentTotal, aggregatedTotal) -> currentTotal + aggregatedTotal,
+            Materialized.<String, Double, KeyValueStore<Bytes, byte[]>>as(salesByStoreStore)
+              .withKeySerde(Serdes.String()).withValueSerde(Serdes.Double())
+        ).toStream().to(salesByStoreTopic, Produced.with(Serdes.String(), Serdes.Double()));
   }
 
   private static LoyaltyPurchase toLoyalty(Invoice invoice) {
@@ -115,6 +137,14 @@ public class TopologyBuilder {
                 .quantity(orderLineItem.getQuantity())
                 .build()
         ).collect(Collectors.toList());
+  }
+
+  public static String salesStoreKeyByMonth(int storeId) {
+    /*
+    This should ideally be picked from the invoice object
+     */
+    LocalDate date = LocalDate.now();
+    return storeId + "_" + date.getMonthValue() + "_" + date.getYear();
   }
 
 }

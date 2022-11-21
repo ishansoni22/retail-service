@@ -23,29 +23,37 @@ public class Topology {
   @Value("${loyalty.store}")
   private String loyaltyStore;
 
-  @Value("${product.purchase.topic}")
-  private String productPurchaseTopic;
-
   @Value("${best.seller.topic}")
   private String bestSellersTopic;
 
   @Value("${best.seller.store}")
   private String bestSellersStore;
 
+  @Value("${sales.by.store.topic}")
+  private String salesByStoreTopic;
+
+  @Value("${sales.by.store.store}")
+  private String salesByStoreStore;
+
   @Autowired
   private StreamsBuilder streamsBuilder;
+
+  @Autowired
+  private BestSellerService bestSellerService;
 
   @PostConstruct
   public void setUp() {
     TopologyBuilder.build(
         streamsBuilder,
+        bestSellerService,
         invoiceTopic,
         shipmentTopic,
         loyaltyTopic,
         loyaltyStore,
-        productPurchaseTopic,
         bestSellersTopic,
-        bestSellersStore
+        bestSellersStore,
+        salesByStoreTopic,
+        salesByStoreStore
     );
   }
 

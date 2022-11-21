@@ -1,4 +1,4 @@
-<mxfile host="app.diagrams.net" modified="2022-10-03T12:12:17.123Z" agent="5.0 (Macintosh)" etag="X2S3rYs1Y0S_kerHWj3R" version="20.3.7" type="github">
+<mxfile host="app.diagrams.net" modified="2022-11-21T07:11:26.054Z" agent="5.0 (Macintosh)" etag="EfOyEhd32ehYNdZ95sMU" version="20.4.0" type="github">
   <diagram id="5P54bRnoej0K6xraSHRH" name="Page-1">
     <mxGraphModel dx="1412" dy="806" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
       <root>
@@ -20,7 +20,7 @@
         <mxCell id="R-bbjsSr86mgTCKb609b-4" value="&lt;div&gt;produces mock invoices:&lt;/div&gt;&lt;div&gt;offline + online orders to &lt;br&gt;&lt;/div&gt;&lt;div&gt;the &lt;b&gt;invoice topic&lt;/b&gt;&lt;br&gt;&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="560" y="620" width="150" height="60" as="geometry" />
         </mxCell>
-        <mxCell id="R-bbjsSr86mgTCKb609b-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1.021;exitY=0.197;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" edge="1" target="R-bbjsSr86mgTCKb609b-14" source="R-bbjsSr86mgTCKb609b-12">
+        <mxCell id="R-bbjsSr86mgTCKb609b-13" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1.021;exitY=0.197;exitDx=0;exitDy=0;exitPerimeter=0;entryX=0;entryY=0.5;entryDx=0;entryDy=0;" parent="1" source="R-bbjsSr86mgTCKb609b-12" target="R-bbjsSr86mgTCKb609b-14" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="1450" y="760" as="targetPoint" />
             <mxPoint x="950" y="760" as="sourcePoint" />
@@ -29,7 +29,7 @@
         <mxCell id="R-bbjsSr86mgTCKb609b-12" value="&lt;div&gt;Kafka&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="750" y="620" width="190" height="710" as="geometry" />
         </mxCell>
-        <mxCell id="y4gbumKhwlBJVd_YbdDv-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1.021;entryY=0.087;entryDx=0;entryDy=0;entryPerimeter=0;" edge="1" parent="1" source="R-bbjsSr86mgTCKb609b-14" target="R-bbjsSr86mgTCKb609b-12">
+        <mxCell id="y4gbumKhwlBJVd_YbdDv-16" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=1.021;entryY=0.087;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="R-bbjsSr86mgTCKb609b-14" target="R-bbjsSr86mgTCKb609b-12" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="1350" y="682" />
@@ -37,36 +37,41 @@
             </Array>
           </mxGeometry>
         </mxCell>
-        <mxCell id="y4gbumKhwlBJVd_YbdDv-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="R-bbjsSr86mgTCKb609b-14" target="R-bbjsSr86mgTCKb609b-25">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="y4gbumKhwlBJVd_YbdDv-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="R-bbjsSr86mgTCKb609b-14" target="R-bbjsSr86mgTCKb609b-22">
-          <mxGeometry relative="1" as="geometry" />
-        </mxCell>
-        <mxCell id="y4gbumKhwlBJVd_YbdDv-26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" edge="1" parent="1" source="R-bbjsSr86mgTCKb609b-14" target="R-bbjsSr86mgTCKb609b-15">
+        <mxCell id="y4gbumKhwlBJVd_YbdDv-24" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="R-bbjsSr86mgTCKb609b-14" target="R-bbjsSr86mgTCKb609b-25" edge="1">
           <mxGeometry relative="1" as="geometry">
             <Array as="points">
               <mxPoint x="1400" y="890" />
-              <mxPoint x="1160" y="890" />
+              <mxPoint x="1258" y="890" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        <mxCell id="y4gbumKhwlBJVd_YbdDv-25" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="R-bbjsSr86mgTCKb609b-14" target="R-bbjsSr86mgTCKb609b-22" edge="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="y4gbumKhwlBJVd_YbdDv-26" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" parent="1" source="R-bbjsSr86mgTCKb609b-14" target="R-bbjsSr86mgTCKb609b-15" edge="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1400" y="890" />
+              <mxPoint x="1120" y="890" />
             </Array>
           </mxGeometry>
         </mxCell>
         <mxCell id="R-bbjsSr86mgTCKb609b-14" value="&lt;div&gt;invoice-fanout (Kafka Streams Application)&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="1320" y="700" width="160" height="120" as="geometry" />
         </mxCell>
-        <mxCell id="R-bbjsSr86mgTCKb609b-15" value="&lt;div&gt;[View]&lt;/div&gt;&lt;div&gt;Total sales by &lt;br&gt;&lt;/div&gt;&lt;div&gt;store by month &lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="1100" y="960" width="120" height="100" as="geometry" />
+        <mxCell id="R-bbjsSr86mgTCKb609b-15" value="&lt;div&gt;[View - Kafka Streams Interactive Query]&lt;/div&gt;&lt;div&gt;Total sales by &lt;br&gt;&lt;/div&gt;&lt;div&gt;store by month &lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="1060" y="960" width="120" height="100" as="geometry" />
         </mxCell>
-        <mxCell id="R-bbjsSr86mgTCKb609b-22" value="&lt;div&gt;[View]&lt;/div&gt;&lt;div&gt;Total sales&lt;/div&gt;&lt;div&gt;&amp;nbsp;by country &lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="R-bbjsSr86mgTCKb609b-22" value="&lt;div&gt;[View - Kafka Streams Interactive Query]&lt;/div&gt;&lt;div&gt;Total sales&lt;/div&gt;&lt;div&gt;&amp;nbsp;by country &lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="1340" y="960" width="120" height="100" as="geometry" />
         </mxCell>
-        <mxCell id="R-bbjsSr86mgTCKb609b-25" value="&lt;div&gt;[View]&lt;/div&gt;&lt;div&gt;Best selling&lt;/div&gt;&lt;div&gt;&amp;nbsp;products&lt;br&gt;&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
-          <mxGeometry x="1220" y="960" width="120" height="100" as="geometry" />
+        <mxCell id="R-bbjsSr86mgTCKb609b-25" value="&lt;div&gt;[View -&lt;/div&gt;&lt;div&gt;&amp;nbsp;Redis Sorted Set]&lt;/div&gt;&lt;div&gt;Best selling&lt;/div&gt;&lt;div&gt;&amp;nbsp;products&lt;br&gt;&lt;/div&gt;" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+          <mxGeometry x="1197.5" y="960" width="120" height="100" as="geometry" />
         </mxCell>
         <mxCell id="R-bbjsSr86mgTCKb609b-27" value="&lt;b&gt;invoice topic&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="1097.5" y="730" width="100" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="R-bbjsSr86mgTCKb609b-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=1.021;entryY=0.311;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" edge="1" target="R-bbjsSr86mgTCKb609b-12" source="R-bbjsSr86mgTCKb609b-14">
+        <mxCell id="R-bbjsSr86mgTCKb609b-28" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=0;exitY=1;exitDx=0;exitDy=0;entryX=1.021;entryY=0.311;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" source="R-bbjsSr86mgTCKb609b-14" target="R-bbjsSr86mgTCKb609b-12" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="960" y="840" as="targetPoint" />
             <mxPoint x="1450" y="840" as="sourcePoint" />
@@ -86,15 +91,15 @@
           <mxGeometry x="550" y="1170" width="170" height="60" as="geometry" />
         </mxCell>
         <mxCell id="jgT_sW7XiQx1aNgOw9o3-4" value="&lt;div&gt;{&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&quot;id&quot;: &quot;1&quot;,&lt;/div&gt;&lt;div&gt;&quot;name&quot;: &quot;Ishan Soni&quot;,&lt;/div&gt;&lt;div&gt;department: &quot;engineering&quot;,&lt;/div&gt;&lt;div&gt;&quot;salary&quot;: 50000&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;}&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
-          <mxGeometry x="550" y="1240" width="170" height="130" as="geometry" />
+          <mxGeometry x="550" y="1230" width="170" height="130" as="geometry" />
         </mxCell>
-        <mxCell id="y4gbumKhwlBJVd_YbdDv-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="jgT_sW7XiQx1aNgOw9o3-5" target="jgT_sW7XiQx1aNgOw9o3-8">
+        <mxCell id="y4gbumKhwlBJVd_YbdDv-4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="jgT_sW7XiQx1aNgOw9o3-5" target="jgT_sW7XiQx1aNgOw9o3-8" edge="1">
           <mxGeometry relative="1" as="geometry" />
         </mxCell>
         <mxCell id="jgT_sW7XiQx1aNgOw9o3-5" value="&lt;div&gt;employee-view-service (Kafka Streams Application)&lt;/div&gt;" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="1120" y="1170" width="160" height="120" as="geometry" />
         </mxCell>
-        <mxCell id="jgT_sW7XiQx1aNgOw9o3-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1.016;exitY=0.859;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" edge="1" target="jgT_sW7XiQx1aNgOw9o3-5" source="R-bbjsSr86mgTCKb609b-12">
+        <mxCell id="jgT_sW7XiQx1aNgOw9o3-6" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;entryX=0;entryY=0.5;entryDx=0;entryDy=0;exitX=1.016;exitY=0.859;exitDx=0;exitDy=0;exitPerimeter=0;" parent="1" source="R-bbjsSr86mgTCKb609b-12" target="jgT_sW7XiQx1aNgOw9o3-5" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="1150" y="1230" as="targetPoint" />
             <mxPoint x="950" y="1230" as="sourcePoint" />
@@ -103,19 +108,22 @@
         <mxCell id="jgT_sW7XiQx1aNgOw9o3-7" value="&lt;b&gt;employee topic&lt;/b&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="980" y="1200" width="110" height="30" as="geometry" />
         </mxCell>
-        <mxCell id="jgT_sW7XiQx1aNgOw9o3-8" value="&lt;div&gt;[View]&lt;/div&gt;Average salary by department" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
+        <mxCell id="jgT_sW7XiQx1aNgOw9o3-8" value="&lt;div&gt;[View - Kafka Streams Interactive Query]&lt;/div&gt;Average salary by department" style="ellipse;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="1360" y="1180" width="120" height="100" as="geometry" />
         </mxCell>
-        <mxCell id="y4gbumKhwlBJVd_YbdDv-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" edge="1" parent="1" source="y4gbumKhwlBJVd_YbdDv-2">
+        <mxCell id="y4gbumKhwlBJVd_YbdDv-3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;" parent="1" source="y4gbumKhwlBJVd_YbdDv-2" edge="1">
           <mxGeometry relative="1" as="geometry">
             <mxPoint x="740" y="1230" as="targetPoint" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="y4gbumKhwlBJVd_YbdDv-2" value="employee manager" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+        <mxCell id="y4gbumKhwlBJVd_YbdDv-2" value="employee manager" style="rounded=0;whiteSpace=wrap;html=1;" parent="1" vertex="1">
           <mxGeometry x="360" y="1170" width="160" height="120" as="geometry" />
         </mxCell>
-        <mxCell id="y4gbumKhwlBJVd_YbdDv-6" value="&lt;div&gt;{&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&quot;invoiceId&quot;:&lt;br&gt;&lt;/div&gt;&lt;div&gt;&quot;storeId&quot;:&lt;br&gt;&lt;/div&gt;&lt;div&gt;&quot;storeCountry&quot;: &lt;br&gt;&lt;/div&gt;&lt;div&gt;&quot;customerId&quot;: &lt;br&gt;&lt;/div&gt;&lt;div&gt;&quot;customerName&quot;:&lt;/div&gt;&lt;div&gt;&quot;customerType&quot;:&lt;/div&gt;&lt;div&gt;&quot;address&quot;:&lt;/div&gt;&lt;div&gt;&quot;orderLineItems&quot;:&lt;/div&gt;&lt;div&gt;&quot;total&quot;:&lt;/div&gt;&lt;div&gt;&quot;paymentInfo&quot;:&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;}&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" vertex="1" parent="1">
+        <mxCell id="y4gbumKhwlBJVd_YbdDv-6" value="&lt;div&gt;{&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;&quot;invoiceId&quot;:&lt;br&gt;&lt;/div&gt;&lt;div&gt;&quot;storeId&quot;:&lt;br&gt;&lt;/div&gt;&lt;div&gt;&quot;storeCountry&quot;: &lt;br&gt;&lt;/div&gt;&lt;div&gt;&quot;customerId&quot;: &lt;br&gt;&lt;/div&gt;&lt;div&gt;&quot;customerName&quot;:&lt;/div&gt;&lt;div&gt;&quot;customerType&quot;:&lt;/div&gt;&lt;div&gt;&quot;address&quot;:&lt;/div&gt;&lt;div&gt;&quot;orderLineItems&quot;:&lt;/div&gt;&lt;div&gt;&quot;total&quot;:&lt;/div&gt;&lt;div&gt;&quot;paymentInfo&quot;:&lt;br&gt;&lt;/div&gt;&lt;div&gt;&lt;br&gt;&lt;/div&gt;&lt;div&gt;}&lt;/div&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
           <mxGeometry x="575" y="690" width="120" height="220" as="geometry" />
+        </mxCell>
+        <mxCell id="tDlDGJJT8bJ8rF5T2NNK-4" value="" style="sketch=0;aspect=fixed;html=1;points=[];align=center;image;fontSize=12;image=img/lib/mscae/Cache_Redis_Product.svg;" vertex="1" parent="1">
+          <mxGeometry x="1233" y="1060" width="50" height="42" as="geometry" />
         </mxCell>
       </root>
     </mxGraphModel>
